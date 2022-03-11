@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zxx" class="js">
+
+<head>
+    {% include ('layout/head.html.twig') %}
+</head>
+
+
+<body class="nk-body bg-lighter npc-general has-sidebar ">
+<div class="nk-app-root">
+    <!-- main @s -->
+    <div class="nk-main ">
+        <!-- sidebar @s -->
+        {% include ('layout/sidebar.html.twig') %}
+        <!-- sidebar @e -->
+        <!-- wrap @s -->
+        <div class="nk-wrap ">
+            <!-- main header @s -->
+            {% include ('layout/header.html.twig') %}
+            <!-- main header @e -->
+            <!-- content @s -->
+            {% block body %}{% endblock %}
+            <!-- content @e -->
+            <!-- footer @s -->
+            {% include ('layout/footer.html.twig') %}
+            <!-- footer @e -->
+        </div>
+        <!-- wrap @e -->
+    </div>
+    <!-- main @e -->
+</div>
+<!-- app-root @e -->
+<!-- JavaScript -->
+<script src="/dashlite/assets/js/bundle.js"></script>
+<script src="/dashlite/assets/js/scripts.js"></script>
+<script src="/dashlite/assets/js/charts/gd-default.js"></script>
+</body>
+
+</html>
