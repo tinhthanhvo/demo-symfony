@@ -1,0 +1,79 @@
+{% extends 'product/layout_index.html.twig' %}
+
+{% block title %} Product list {% endblock %}
+
+{% block content %}
+    <div class="example-wrapper">
+        {% if products is not empty %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Price</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for product in products %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td style="width:180px;">
+                            {% if product.image is not empty %}
+                                <img class="show-image" src="/uploads/images/{{ product.image }}" alt="">
+                            {% endif %}
+                        </td>
+                        <td style="width:400px;"><h6 style="padding-top:5px">{{ product.name }}</h6>
+                            {% if product.category is not null %}
+                                Category: {{ product.category.name }}
+                            {% endif %}
+                        </td>
+                        <td style="width:150px;">
+                            {% if product.prices is not empty %}
+                                <ul>{% for price in product.prices %}
+                                    <li>{{ price.size.name }}: 
+                                        <span style="float:right; padding-right:20px">
+                                            {{ price.price }}
+                                        </span>
+                                    </li>
+                                {% endfor %}<ul>
+                            {% else %}
+                                <p style="color: #ff0000; text-align: center;">Not yet<br />ready for sale</p>
+                            {% endif %}
+                        </td>
+                        <td style="float:right">
+                            <a href="{{ path('product_cash', {'id': product.id}) }}"><img src="/images/money-bill-solid.svg" class="product-cash" alt="" width="20" height="20"></a> | 
+                            <a href="{{ path('product_update', {'id': product.id}) }}"><img src="/images/edit-solid.svg" class="product-edit" alt="" width="15" height="15"></a> | 
+                            <a onclick="deleteProduct('{{ path('product_delete', {'id': product.id}) }}', '{{ product.name }}')"><img src="/images/trash-alt-solid.svg" class="product-delete" alt="" width="15" height="15"></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>There are no product in table.</p>
+        {% endif %}
+    </div>
+
+    <!-- Button trigger modal -->
+    <button id="showDialog" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" hidden>
+        Delete product
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                </div>
+                <div id="modalContent" class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <a id="submitDelete"><button type="button" class="btn btn-primary">Delete</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

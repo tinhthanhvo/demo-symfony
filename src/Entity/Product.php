@@ -6,6 +6,7 @@ use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
@@ -21,16 +22,32 @@ class Product
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Assert\NotBlank(
+     *     message = "Product name must not be empty."
+     * )
+     * @Assert\Length(
+     *      max = 50,
+     *      maxMessage = "Product name cannot be longer than {{ limit }} characters."
+     * )
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Length(
+     *      max = 255,
+     *      maxMessage = "Path of product image cannot be longer than {{ limit }} characters."
+     * )
+     * @Assert\File(mimeTypes={"image/jpeg"})
      */
     private $image;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\Length(
+     *      max = 300,
+     *      maxMessage = "Description of product cannot be longer than {{ limit }} characters."
+     * )
      */
     private $description;
 
@@ -67,12 +84,12 @@ class Product
         return $this;
     }
 
-    public function getImage(): ?string
+    public function getImage()
     {
         return $this->image;
     }
 
-    public function setImage(?string $image): self
+    public function setImage($image)
     {
         $this->image = $image;
 
