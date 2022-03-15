@@ -22,4 +22,5 @@ product_delete:
 
 product_cash:
   path: /product/{id}/price
-  controller: App\Controller\PriceController::new
+  controller: App\Controller\PriceController::index
+

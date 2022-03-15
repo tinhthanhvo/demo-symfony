@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PriceRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=PriceRepository::class)
@@ -19,17 +20,19 @@ class Price
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\GreaterThan(0, message="Please, Price must be greater than 0")
      */
     private $price;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="prices")
+     * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="prices", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
+     * @ORM\OrderBy({"name" = "asc"})
      */
     private $product;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Size::class, inversedBy="prices")
+     * @ORM\ManyToOne(targetEntity=Size::class, inversedBy="prices", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $size;

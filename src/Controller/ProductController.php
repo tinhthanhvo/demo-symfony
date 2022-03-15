@@ -65,7 +65,8 @@ class ProductController extends AbstractController
         $id,
         Request $request,
         FileUploader $fileUploader
-    ): Response {
+    ): Response
+    {
         $product = $this->productRepository->find($id);
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
@@ -85,8 +86,7 @@ class ProductController extends AbstractController
 
         return $this->renderForm('product/update.html.twig', [
             'form' => $form,
-            'product' => $product
-        ]);
+            'product' => $product]);
     }
 
     /**
@@ -98,5 +98,7 @@ class ProductController extends AbstractController
         $this->productRepository->remove($product);
 
         return $this->redirectToRoute('product_index');
+
     }
+
 }
