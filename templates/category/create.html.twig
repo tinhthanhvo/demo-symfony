@@ -1,0 +1,52 @@
+{% extends 'category/layout.html.twig' %}
+
+{% block title %} Demo Management {% endblock %}
+
+{% block content %}
+    {% if form_errors(form.name) %}
+        <div class="example-alert">
+            <div class="alert alert-danger alert-icon">
+                <span>{{ form_errors(form.name) }}</span>
+            </div>
+        </div>
+        <br>
+    {% endif %}
+{#    {% if not form.vars.valid %}#}
+{#        <div class="example-alert">#}
+{#            <div class="alert alert-danger alert-icon">#}
+{#                <span>{{ form_errors(form) }}</span>#}
+{#            </div>#}
+{#        </div>#}
+{#        <br>#}
+{#    {% endif %}#}
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+    <div class="card card-preview">
+        <div class="card-inner">
+            <div class="preview-block">
+                <span class="preview-title-lg overline-title">Create category</span>
+                <div class="row gy-4">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label" for="default-1-02">Category name</label>
+                            {{ form_widget(form.name, { 'attr': {'placeholder': 'Category name'|trans, 'class': 'form-control', 'id': 'default-1-02'}}) }}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-label" for="fv-topics">Parent</label>
+                            <div class="form-control-wrap ">
+                                {{ form_widget(form.parent,
+                                    { 'attr': {'class': 'form-select form-control', 'data-placeholder': 'Select a option'}}
+                                ) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <button class="btn btn-primary" type="submit">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- .card-preview -->
+    {{ form_end(form) }}
+{% endblock %}

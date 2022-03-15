@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form\Type;
+namespace App\Form;
 
 use App\Entity\Category;
 use App\Entity\Product;
@@ -35,13 +35,14 @@ class ProductType extends AbstractType
             ->add('name', TextType::class, ['label' => 'Product name'])
             ->add('description', TextareaType::class, ['label' => 'Description'])
             ->add('image', FileType::class, [
-                'label' => 'Image (JPEG, PNG or SVG file)',
+                'label' => 'Image (JPG, JPEG, PNG or SVG file)',
                 'mapped' => false,
                 'required' => false,
                 'constraints' => [
                     new File([
                         'maxSize' => '5M',
                         'mimeTypes' => [
+                            'image/jpg',
                             'image/jpeg',
                             'image/png',
                             'image/svg+xml',
