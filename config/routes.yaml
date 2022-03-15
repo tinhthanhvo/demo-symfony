@@ -1,3 +1,25 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+
+product_index:
+  path: /product
+  controller: App\Controller\ProductController::index
+
+product_add:
+  path: /product/add
+  controller: App\Controller\ProductController::addAction
+
+product_update:
+  path: /product/{id}/update
+  controller: App\Controller\ProductController::updateAction
+  methods: [PUT|PATCH|GET|POST]
+
+product_delete:
+  path: /product/{id}/delete
+  controller: App\Controller\ProductController::deleteAction
+  methods: [DELETE|GET|POST]
+
+product_cash:
+  path: /product/{id}/price
+  controller: App\Controller\PriceController::new

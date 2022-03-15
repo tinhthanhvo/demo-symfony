@@ -33,7 +33,7 @@ class Price
      * @ORM\JoinColumn(nullable=false)
      */
     private $size;
-    
+
     public function getId(): ?int
     {
         return $this->id;

@@ -1,0 +1,71 @@
+{% extends 'product/layout.html.twig' %}
+
+{% block title %} Update product information {% endblock %}
+
+{% block content %}
+    {% if product is not empty %}
+        <div class="row">
+            <div class="main-column">
+            {{ form_start(form) }}
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="form-label" for="default-1-02">Name</label>
+                        {{ form_widget(form.name, { 'attr': {'class': 'form-input form-control form-control-lg'}}) }}
+                        {{ form_errors(form.name) }}
+                    </div>
+                </div>
+        
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="form-label" for="default-1-02">Discription</label>
+                        {{ form_widget(form.description, { 'attr': {'class': 'form-text form-control form-control-lg'}}) }}
+                        {{ form_errors(form.description) }}
+                    </div>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="form-label" for="default-1-02">Image</label>
+                        {{ form_widget(form.image, { 'attr': {'class': 'form-input form-control-file form-control-lg'}}) }}
+                        {{ form_errors(form.image) }}
+                    </div>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="form-label" for="default-1-02">Category</label>
+                        {{ form_widget(form.category, { 'attr': {'class': 'form-select form-control form-control-lg'}}) }}
+                        {{ form_errors(form.category) }}
+                    </div>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        {{ form_widget(form.save, { 
+                            'label': 'Update',
+                            'attr': {'class': 'form-button form-control form-control-lg btn-primary'} 
+                        }) }}
+
+                        <a href="{{ path('product_index') }}">
+                            {{ form_widget(form.cancel) }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {{ form_end(form) }}
+
+            <div class="column">
+                {% if product.image is not empty %}
+                    <img id="loadImage" src="/uploads/images/{{ product.image }}" alt="Your product image">
+                {% else %}
+                    <img id="loadImage" src="" alt="Your product image" style="display: none">
+                {% endif %}
+            </div>
+        </div>
+    {% else %}
+        <p>There are no product in table.</p>
+        <a href="{{ path('product_index') }}">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Back to Product list</button>
+        </a>
+    {% endif %}
+{% endblock %}
