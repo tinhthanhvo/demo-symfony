@@ -5,13 +5,6 @@
 {% block content %}
     {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
     <div class="card card-preview">
-{#        {% if not form.vars.valid %}#}
-{#            <div class="example-alert m-2">#}
-{#                <div class="alert alert-danger alert-icon">#}
-{#                    <em class="icon ni ni-cross-circle"></em>{{ form_errors(form) }}#}
-{#                </div>#}
-{#            </div>#}
-{#        {% endif %}#}
         <div class="card-inner">
             <div class="preview-block">
                 <span class="preview-title-lg overline-title">Add price</span>
@@ -36,11 +29,9 @@
                             <div class="form-control-wrap">
                                 {{ form_widget(form.price, { 'attr': {'class': 'form-control'}} ) }}
                                 {% if form_errors(form.price) %}
-                                <div class="example-alert m-2">
                                     <div class="alert alert-danger alert-icon">
-                                        <em class="icon ni ni-cross-circle"></em>{{ form_errors(form.price) }}
+                                        <span>{{ form_errors(form.price) }}</span>
                                     </div>
-                                </div>
                                 {% endif %}
                             </div>
                         </div>

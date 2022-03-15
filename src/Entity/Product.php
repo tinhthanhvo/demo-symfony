@@ -38,7 +38,6 @@ class Product
      *      max = 255,
      *      maxMessage = "Path of product image cannot be longer than {{ limit }} characters."
      * )
-     * @Assert\File(mimeTypes={"image/jpeg"})
      */
     private $image;
 

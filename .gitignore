@@ -5,6 +5,7 @@
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
+/public/uploads/
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
@@ -17,4 +18,4 @@ yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 
 .idea
-database
+/database

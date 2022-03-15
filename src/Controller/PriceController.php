@@ -23,7 +23,7 @@ class PriceController extends AbstractController
         $this->priceRepository = $priceRepository;
     }
     /**
-     * @Route("/product/{id}/price", name="price_index")
+     * @Route("/product/{id}/prices", name="price_index")
      */
     public function index(Request $request, Product $product, PaginatorInterface $paginator): Response
     {

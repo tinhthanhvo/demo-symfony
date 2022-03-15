@@ -3,10 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Product;
-use App\Form\Type\ProductType;
+use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use App\Service\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -34,10 +35,8 @@ class ProductController extends AbstractController
     /**
      * @Route("/product/add", name="product_new")
      */
-    public function addAction(
-        Request $request,
-        FileUploader $fileUploader
-    ): Response {
+    public function addAction(Request $request, FileUploader $fileUploader): Response
+    {
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
@@ -61,19 +60,18 @@ class ProductController extends AbstractController
     /**
      * @Route("/product/{id}/update", name="product_edit")
      */
-    public function updateAction(
-        $id,
-        Request $request,
-        FileUploader $fileUploader
-    ): Response
+    public function updateAction($id, Request $request, FileUploader $fileUploader): Response
     {
         $product = $this->productRepository->find($id);
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var UploadedFile $imageFile */
+            /**
+             * @var UploadedFile $imageFile
+             */
             $imageFile = $form->get('image')->getData();
+
             if ($imageFile) {
                 $newFilename = $fileUploader->upload($imageFile);
                 $product->setImage($newFilename);
@@ -98,7 +96,5 @@ class ProductController extends AbstractController
         $this->productRepository->remove($product);
 
         return $this->redirectToRoute('product_index');
-
     }
-
 }
