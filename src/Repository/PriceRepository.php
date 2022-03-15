@@ -73,17 +73,4 @@ class PriceRepository extends ServiceEntityRepository
         ;
     }
     */
-
-    public function findProductByProductAndSize(int $productId, int $sizeId): array
-    {
-        $conn = $this->getEntityManager()->getConnection();
-
-        $sql = 'SELECT * FROM price 
-                    WHERE product_id = :productID AND size_id = :sizeID';
-
-        $stmt = $conn->prepare($sql);
-        $resultSet = $stmt->executeQuery(['productID' => $productId, 'sizeID' => $sizeId]);
-
-        return $resultSet->fetchAllAssociative();
-    }
 }
