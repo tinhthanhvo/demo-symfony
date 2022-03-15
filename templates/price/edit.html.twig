@@ -1,0 +1,49 @@
+{% extends 'price/layout.html.twig' %}
+
+{% block title %}Price management{% endblock %}
+
+{% block content %}
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+    <div class="card card-preview">
+        {% if not form.vars.valid %}
+            <div class="example-alert m-2">
+                <div class="alert alert-danger alert-icon">
+                    <em class="icon ni ni-cross-circle"></em>{{ form_errors(form) }}
+                </div>
+            </div>
+        {% endif %}
+        <div class="card-inner">
+            <div class="preview-block">
+                <span class="preview-title-lg overline-title">Edit price</span>
+                <div class="row gy-4">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label" for="default-1-02">Product name</label>
+                            <input class="form-control" value="{{ product.name }}" disabled>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label">Size</label>
+                            <div class="form-control-wrap">
+                                <input class="form-control" value="{{ size.getName() }}" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label">Price</label>
+                            <div class="form-control-wrap">
+                                {{ form_widget(form.price, { 'attr': {'class': 'form-control'}} ) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- .card-preview -->
+    {{ form_end(form) }}
+{% endblock %}
