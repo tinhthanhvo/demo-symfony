@@ -8,7 +8,6 @@ use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -23,6 +22,8 @@ class ProductController extends AbstractFOSRestController
 
     /**
      * @Rest\Get("/products")
+     *
+     * @return Response
      */
     public function getProducts(): Response
     {
@@ -33,33 +34,32 @@ class ProductController extends AbstractFOSRestController
 
     /**
      * @Rest\Get("/products/{id}")
-     * @param $id
-     * @return View
+     * @param Product $product
+     *
+     * @return Response
      */
-    public function getProduct($id): View
+    public function getProduct(Product $product): Response
     {
-        $product = $this->productRepository->find($id);
-
-        return View::create($product, Response::HTTP_OK);
+        return $this->handleView($this->view($product));
     }
 
     /**
      * @Rest\Post("/products")
      * @param Request $request
-     * @param CategoryRepository $categoryRepository
-     * @return View
+     *
+     * @return Response
      */
-    public function insertProduct(Request $request, CategoryRepository $categoryRepository): View
+    public function insertProduct(Request $request): Response
     {
-        $data = json_decode($request->getContent(), true);
         $product = new Product();
-        $category = $categoryRepository->find($data['category_id']);
-
         $form = $this->createForm(ProductType::class, $product);
-        $form->submit($data);
-        $product->setCategory($category);
-        $this->productRepository->add($product);
+        $form->submit($request->request->all());
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->productRepository->add($product);
 
-        return View::create($product, Response::HTTP_CREATED);
+            return $this->handleView($this->view(null, Response::HTTP_CREATED));
+        }
+
+        return $this->handleView($this->view($form->getErrors()));
     }
 }
