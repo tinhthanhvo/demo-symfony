@@ -34,24 +34,24 @@ class ProductType extends AbstractType
         $builder
             ->add('name', TextType::class, ['label' => 'Product name'])
             ->add('description', TextareaType::class, ['label' => 'Description'])
-            ->add('image', FileType::class, [
-                'label' => 'Image (JPG, JPEG, PNG or SVG file)',
-                'mapped' => false,
-                'required' => false,
-                'constraints' => [
-                    new File([
-                        'maxSize' => '5M',
-                        'mimeTypes' => [
-                            'image/jpg',
-                            'image/jpeg',
-                            'image/png',
-                            'image/svg+xml',
-                        ],
-                        'maxSizeMessage' => 'File is too large.',
-                        'mimeTypesMessage' => 'Please upload a valid Image file.',
-                    ])
-                ],
-            ])
+//            ->add('image', FileType::class, [
+//                'label' => 'Image (JPG, JPEG, PNG or SVG file)',
+//                'mapped' => false,
+//                'required' => false,
+//                'constraints' => [
+//                    new File([
+//                        'maxSize' => '5M',
+//                        'mimeTypes' => [
+//                            'image/jpg',
+//                            'image/jpeg',
+//                            'image/png',
+//                            'image/svg+xml',
+//                        ],
+//                        'maxSizeMessage' => 'File is too large.',
+//                        'mimeTypesMessage' => 'Please upload a valid Image file.',
+//                    ])
+//                ],
+//            ])
             ->add('category', ChoiceType::class, [
                 'choices' => $this->categoryRepository->findAll(),
                 'choice_value' => 'name',
