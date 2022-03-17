@@ -8,20 +8,12 @@ use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-//use FOS\RestBundle\View\View;
 use FOS\RestBundle\View\View;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class ProductController extends AbstractFOSRestController
 {
-
     private $productRepository;
 
     public function __construct(ProductRepository $productRepository)
@@ -31,13 +23,12 @@ class ProductController extends AbstractFOSRestController
 
     /**
      * @Rest\Get("/products")
-     * @return View
      */
-    public function getProducts(): View
+    public function getProducts(): Response
     {
         $products = $this->productRepository->findAll();
 
-        return View::create($products, Response::HTTP_OK);
+        return $this->handleView($this->view($products));
     }
 
     /**
