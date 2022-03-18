@@ -6,6 +6,7 @@ use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
+use App\Service\FileUploader;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,6 +59,36 @@ class ProductController extends AbstractFOSRestController
             $this->productRepository->add($product);
 
             return $this->handleView($this->view(null, Response::HTTP_CREATED));
+        }
+
+        return $this->handleView($this->view($form->getErrors()));
+    }
+
+    /**
+     * @Rest\Put("/products/{id}")
+     * @param Request $request
+     * @param int $id
+     * @return Response
+     */
+    public function updateProduct(int $id, Request $request, FileUploader $fileUploader): Response
+    {
+        $product = $this->productRepository->find($id);
+        if(!$product) {
+            $view = $this->view(['error' => 'Product is not found.'], Response::HTTP_NOT_FOUND);
+            return $this->handleView($view);
+        }
+
+        $form = $this->createForm(ProductType::class, $product);
+        $form->submit($request->request->all());
+        if ($form->isSubmitted() && $form->isValid()) {
+            $uploadFile = $request->files->get('image');
+            if ($uploadFile) {
+                $saveFile = $fileUploader->upload($uploadFile);
+                $product->setImage($saveFile);
+            }
+            $this->productRepository->add($product);
+
+            return $this->handleView($this->view($product, Response::HTTP_OK));
         }
 
         return $this->handleView($this->view($form->getErrors()));
