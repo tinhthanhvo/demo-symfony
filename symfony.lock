@@ -92,6 +92,21 @@
             "ref": "fa845143b7e0a4c70aedd1a88c549e6d977e9ae5"
         }
     },
+    "jms/metadata": {
+        "version": "2.6.1"
+    },
+    "jms/serializer": {
+        "version": "3.17.1"
+    },
+    "jms/serializer-bundle": {
+        "version": "4.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "3.0",
+            "ref": "384cec52df45f3bfd46a09930d6960a58872b268"
+        }
+    },
     "knplabs/knp-components": {
         "version": "v3.5.0"
     },
