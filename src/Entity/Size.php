@@ -6,6 +6,7 @@ use App\Repository\SizeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=SizeRepository::class)
@@ -21,6 +22,7 @@ class Size
 
     /**
      * @ORM\Column(type="string", length=11)
+     * @Groups({"show"})
      */
     private $name;
 

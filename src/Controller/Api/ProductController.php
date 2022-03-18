@@ -5,12 +5,13 @@ namespace App\Controller\Api;
 use _PHPStan_ae8980142\Nette\Schema\ValidationException;
 use App\Entity\Product;
 use App\Form\ProductType;
-use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Service\FileUploader;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use JMS\Serializer\SerializerBuilder;
+use JMS\Serializer\SerializationContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\File;
@@ -35,6 +36,10 @@ class ProductController extends AbstractFOSRestController
     {
         $products = $this->productRepository->findAll();
 
+        $serializer = SerializerBuilder::create()->build();
+        $convertToJson = $serializer->serialize($products, 'json', SerializationContext::create()->setGroups(array('show')));
+        $products = $serializer->deserialize($convertToJson, 'array', 'json');
+
         return $this->handleView($this->view($products));
     }
 
@@ -46,6 +51,10 @@ class ProductController extends AbstractFOSRestController
      */
     public function getProduct(Product $product): Response
     {
+        $serializer = SerializerBuilder::create()->build();
+        $convertToJson = $serializer->serialize($product, 'json', SerializationContext::create()->setGroups(array('show')));
+        $product = $serializer->deserialize($convertToJson, 'array', 'json');
+
         return $this->handleView($this->view($product));
     }
 
@@ -77,7 +86,7 @@ class ProductController extends AbstractFOSRestController
     /**
      * @Rest\Put("/products/{id}")
      * @param Request $request
-     * @param int $id
+     * @param integer $id
      * @return Response
      */
     public function updateProduct(int $id, Request $request): Response
@@ -134,5 +143,34 @@ class ProductController extends AbstractFOSRestController
         $saveFile = $fileUploader->upload($uploadFile);
 
         return $this->handleView($this->view(['imageUrl' => $saveFile], Response::HTTP_CREATED));
+    }
+
+    /**
+     * @Rest\Delete("/products/{id}")
+     * @param integer $id
+     * @return Response
+     */
+    public function deleteProduct(int $id): Response
+    {
+        try {
+            $product = $this->productRepository->find($id);
+            if (!$product) {
+                return $this->handleView($this->view(
+                    ['error' => 'No product was found with this id.'],
+                    Response::HTTP_NOT_FOUND
+                ));
+            }
+
+            $this->productRepository->remove($product);
+
+            return $this->handleView($this->view([], Response::HTTP_NO_CONTENT));
+        } catch (\Exception $e) {
+            //Need to add log the error message
+        }
+
+        return $this->handleView($this->view(
+            ['error' => 'Something went wrong! Please contact support.'],
+            Response::HTTP_INTERNAL_SERVER_ERROR
+        ));
     }
 }

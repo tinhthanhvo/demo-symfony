@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PriceRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -21,6 +22,7 @@ class Price
     /**
      * @ORM\Column(type="integer")
      * @Assert\GreaterThan(0, message="Please, Price must be greater than 0")
+     * @Groups({"show"})
      */
     private $price;
 
@@ -34,6 +36,7 @@ class Price
     /**
      * @ORM\ManyToOne(targetEntity=Size::class, inversedBy="prices", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"show"})
      */
     private $size;
 
