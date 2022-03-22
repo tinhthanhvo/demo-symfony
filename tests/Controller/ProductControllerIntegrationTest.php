@@ -4,6 +4,8 @@ namespace App\Tests\Controller;
 
 use App\DataFixtures\ProductFixture;
 use App\Entity\Product;
+use App\Service\FileUploader;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
@@ -96,4 +98,28 @@ class ProductControllerIntegrationTest extends BaseWebTestCase
         $this->assertIsObject($product->getCategory());
     }
 
+    public function testUpdateImageProduct()
+    {
+        $fileUploader = new UploadedFile(
+            __DIR__ . '/../../fixtures/ao.png',
+            'ao.png',
+            'image/jpeg/png',
+            null,
+            true
+        );
+
+        $this->client->request(
+            Request::METHOD_POST,
+            '/api/products/image',
+            [],
+            [
+                'image' => $fileUploader
+            ],
+            [
+                'HTTP_ACCEPT' => 'application/json',
+            ]
+        );
+
+        $this->assertEquals(Response::HTTP_CREATED, $this->client->getResponse()->getStatusCode());
+    }
 }
