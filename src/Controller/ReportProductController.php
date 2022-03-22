@@ -23,7 +23,6 @@ class ReportProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $category = $form->get('category')->getData();
 
             $application = new Application($kernel);

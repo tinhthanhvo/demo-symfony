@@ -13,6 +13,7 @@
         "doctrine/orm": "^2.11",
         "friendsofsymfony/rest-bundle": "^3.3",
         "jms/serializer-bundle": "^4.0",
+        "knplabs/knp-menu-bundle": "^3.2",
         "knplabs/knp-paginator-bundle": "^5.8",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpstan/phpdoc-parser": "^1.2",
@@ -52,9 +53,14 @@
         "ext-json": "*"
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
         "phpstan/phpstan": "^1.4",
+        "phpunit/phpunit": "^9.5",
+        "symfony/browser-kit": "5.4.*",
+        "symfony/css-selector": "5.4.*",
         "symfony/debug-bundle": "5.4.*",
         "symfony/maker-bundle": "^1.38",
+        "symfony/phpunit-bridge": "^6.0",
         "symfony/stopwatch": "5.4.*",
         "symfony/web-profiler-bundle": "5.4.*"
     },

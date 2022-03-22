@@ -36,16 +36,16 @@ class ReportProductCommand extends Command
         if ($id && $id != 1) {
             $category = $this->categoryRepository->find($id);
             $products = $category->getProducts();
-        }else {
+        } else {
             $products = $this->productRepository->findAll();
         }
-        $fileName = 'Report'. date('Ymd');
+        $fileName = 'Report' . date('Ymd');
         if ($input->getOption('nameFile')) {
             $fileName =  $input->getOption('nameFile');
         }
-        $outputBuffer = fopen($fileName. '.csv', 'w');
-        fputcsv($outputBuffer,['Name', 'Category', 'ImageUrl', 'Description'], ',');
-        foreach($products as $product) {
+        $outputBuffer = fopen($fileName . '.csv', 'w');
+        fputcsv($outputBuffer, ['Name', 'Category', 'ImageUrl', 'Description'], ',');
+        foreach ($products as $product) {
             fputcsv($outputBuffer, [
                 $product->getName(),
                 $product->getCategory(),

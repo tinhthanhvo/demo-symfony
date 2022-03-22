@@ -29,7 +29,6 @@ class ProductController extends AbstractFOSRestController
 
     /**
      * @Rest\Get("/products")
-     *
      * @return Response
      */
     public function getProducts(): Response
@@ -46,8 +45,7 @@ class ProductController extends AbstractFOSRestController
     /**
      * @Rest\Get("/products/{id}")
      * @param Product $product
-     *
-     * @return Response:
+     * @return Response
      */
     public function getProduct(Product $product): Response
     {
@@ -92,17 +90,19 @@ class ProductController extends AbstractFOSRestController
     public function updateProduct(int $id, Request $request): Response
     {
         $product = $this->productRepository->find($id);
-        if(!$product) {
+        if (!$product) {
             $view = $this->view(['error' => 'Product is not found.'], Response::HTTP_NOT_FOUND);
             return $this->handleView($view);
         }
 
         $form = $this->createForm(ProductType::class, $product);
         $requestData = json_decode($request->getContent(), true);
-        $form->submit($requestData);
+        $form->submit($requestData, false);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $product->setImage($requestData['image']);
+            if (isset($requestData['image'])) {
+                $product->setImage($requestData['image']);
+            }
             $this->productRepository->add($product);
 
             return $this->handleView($this->view($product, Response::HTTP_NO_CONTENT));
