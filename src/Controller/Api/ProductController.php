@@ -99,10 +99,13 @@ class ProductController extends AbstractFOSRestController
 
         $form = $this->createForm(ProductType::class, $product);
         $requestData = json_decode($request->getContent(), true);
-        $form->submit($requestData);
+        $form->submit($requestData, false);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $product->setImage($requestData['image']);
+
+            if(isset($requestData['image'])) {
+                $product->setImage($requestData['image']);
+            }
             $this->productRepository->add($product);
 
             return $this->handleView($this->view($product, Response::HTTP_NO_CONTENT));
