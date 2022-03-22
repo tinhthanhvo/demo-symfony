@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use _PHPStan_ae8980142\Nette\Schema\ValidationException;
 use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\CategoryRepository;
@@ -12,6 +13,9 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\Image;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ProductController extends AbstractFOSRestController
 {
@@ -68,5 +72,67 @@ class ProductController extends AbstractFOSRestController
         }
 
         return $this->handleView($this->view($form->getErrors(), Response::HTTP_BAD_REQUEST));
+    }
+
+    /**
+     * @Rest\Put("/products/{id}")
+     * @param Request $request
+     * @param int $id
+     * @return Response
+     */
+    public function updateProduct(int $id, Request $request): Response
+    {
+        $product = $this->productRepository->find($id);
+        if(!$product) {
+            $view = $this->view(['error' => 'Product is not found.'], Response::HTTP_NOT_FOUND);
+            return $this->handleView($view);
+        }
+
+        $form = $this->createForm(ProductType::class, $product);
+        $requestData = json_decode($request->getContent(), true);
+        $form->submit($requestData);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $product->setImage($requestData['image']);
+            $this->productRepository->add($product);
+
+            return $this->handleView($this->view($product, Response::HTTP_NO_CONTENT));
+        }
+
+        return $this->handleView($this->view($form->getErrors()));
+    }
+
+    /**
+     * @Rest\Post("/products/image")
+     * @param Request $request
+     * @param FileUploader $fileUploader
+     * @param ValidatorInterface $validator
+     * @return Response
+     */
+    public function updateImageProduct(Request $request, FileUploader $fileUploader, ValidatorInterface $validator): Response
+    {
+        $uploadFile = $request->files->get('image');
+
+        if (!$uploadFile) {
+            return $this->handleView($this->view(['error' => 'Please choose image to upload.'], Response::HTTP_BAD_REQUEST));
+        }
+
+        $errors = $validator->validate($uploadFile, new Image([
+            'maxSize' => '5M',
+            'mimeTypes' => [
+                "image/jpeg",
+                "image/jpg",
+                "image/png",
+            ],
+            'maxSizeMessage' => 'File is too large.',
+            'mimeTypesMessage' => 'Please upload a valid Image file.',
+        ]));
+
+        if (count($errors)) {
+            return $this->handleView($this->view(['error' => $errors], Response::HTTP_BAD_REQUEST));
+        }
+        $saveFile = $fileUploader->upload($uploadFile);
+
+        return $this->handleView($this->view(['imageUrl' => $saveFile], Response::HTTP_CREATED));
     }
 }
