@@ -39,3 +39,9 @@ services:
         class: App\Form\CategoryType
         calls:
             - [ setCategoryRepository, [ '@App\Repository\CategoryRepository' ] ]
+
+    App\Command\ReportProductCommand:
+        class: App\Command\ReportProductCommand
+        calls:
+            - [ setCategoryRepository, [ '@App\Repository\CategoryRepository' ] ]
+            - [ setProductRepository, [ '@App\Repository\ProductRepository' ] ]
