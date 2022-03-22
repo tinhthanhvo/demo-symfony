@@ -80,7 +80,6 @@ class ProductControllerTest extends TestCase
 
     public function testInsertProduct()
     {
-        $product = new Product();
         $response = new Response();
         $view = new View();
 
@@ -90,19 +89,18 @@ class ProductControllerTest extends TestCase
             ->getMock();
         $form = $this->getMockBuilder(FormInterface::class)->disableOriginalConstructor()
             ->getMock();
-        $inputBag = $this->getMockBuilder(ParameterBag::class)->disableOriginalConstructor()
-            ->getMock();
-        $request->request = $inputBag;
         $this->productController->expects($this->once())->method('createForm')->willReturn($form);
-        $inputBag->expects($this->once())->method('all')->willReturn([]);
+        $request->expects($this->once())->method('getContent')->willReturn('');
         $form->expects($this->once())->method('submit');
         $form->expects($this->once())->method('isSubmitted')->willReturn(true);
         $form->expects($this->once())->method('isValid')->willReturn(true);
+
         $fileBag = $this->getMockBuilder(FileBag::class)->disableOriginalConstructor()
             ->getMock();
         $uploadFile = $this->getMockBuilder(UploadedFile::class)->disableOriginalConstructor()
             ->getMock();
         $request->files = $fileBag;
+
         $fileBag->expects($this->once())->method('get')->willReturn($uploadFile);
         $fileUploader->expects($this->once())->method('upload')->willReturn('');
         $this->productRepository->expects($this->once())->method('add');
