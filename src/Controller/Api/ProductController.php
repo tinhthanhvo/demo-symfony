@@ -68,7 +68,8 @@ class ProductController extends AbstractFOSRestController
     {
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
-        $form->submit($request->request->all());
+        $requestData = json_decode($request->getContent(), true);
+        $form->submit($requestData);
         if ($form->isSubmitted() && $form->isValid()) {
             $uploadFile = $request->files->get('image');
             if ($uploadFile) {

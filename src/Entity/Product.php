@@ -41,14 +41,14 @@ class Product
     private $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="products")
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="products", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"show"})
      */
     private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity=Price::class, mappedBy="product", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Price::class, mappedBy="product", orphanRemoval=true, cascade={"persist"})
      * @Groups({"show"})
      */
     private $prices;
