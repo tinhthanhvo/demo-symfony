@@ -40,10 +40,8 @@ class ReportProductController extends AbstractController
             $application->run($input, $output);
 
             $content = $output->fetch();
+            $this->addFlash('success', $content);
 
-            return new Response($content);
-
-//            return $this->redirectToRoute('report_product', [], Response::HTTP_OK);
         }
 
         return $this->renderForm('report_product/index.html.twig', [
