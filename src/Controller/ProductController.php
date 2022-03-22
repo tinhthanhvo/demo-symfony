@@ -6,8 +6,8 @@ use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use App\Service\FileUploader;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -49,7 +49,7 @@ class ProductController extends AbstractController
                 $product->setImage($saveFilename);
             }
 
-            $this->productRepository->add($product, true);
+            $this->productRepository->add($product);
 
             return $this->redirectToRoute('product_index');
         }
@@ -71,7 +71,6 @@ class ProductController extends AbstractController
              * @var UploadedFile $imageFile
              */
             $imageFile = $form->get('image')->getData();
-
             if ($imageFile) {
                 $newFilename = $fileUploader->upload($imageFile);
                 $product->setImage($newFilename);
@@ -84,7 +83,8 @@ class ProductController extends AbstractController
 
         return $this->renderForm('product/update.html.twig', [
             'form' => $form,
-            'product' => $product]);
+            'product' => $product
+        ]);
     }
 
     /**
