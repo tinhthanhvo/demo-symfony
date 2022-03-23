@@ -32,6 +32,7 @@
         "symfony/monolog-bundle": "^3.0",
         "symfony/notifier": "5.4.*",
         "symfony/options-resolver": "5.4.*",
+        "symfony/panther": "^1.1",
         "symfony/process": "5.4.*",
         "symfony/property-access": "5.4.*",
         "symfony/property-info": "5.4.*",
@@ -52,9 +53,17 @@
         "ext-json": "*"
     },
     "require-dev": {
+        "dama/doctrine-test-bundle": "^6.7",
+        "dbrekelmans/bdi": "^1.0",
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
+        "hautelook/alice-bundle": "^2.7",
         "phpstan/phpstan": "^1.4",
+        "phpunit/phpunit": "^9.5",
+        "symfony/browser-kit": "5.4.*",
+        "symfony/css-selector": "5.4.*",
         "symfony/debug-bundle": "5.4.*",
         "symfony/maker-bundle": "^1.38",
+        "symfony/phpunit-bridge": "^6.0",
         "symfony/stopwatch": "5.4.*",
         "symfony/web-profiler-bundle": "5.4.*"
     },
