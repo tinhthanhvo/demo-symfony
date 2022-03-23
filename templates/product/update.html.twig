@@ -39,17 +39,9 @@
                     </div>
                 </div>
 
+                <br>
                 <div class="col-sm-12">
-                    <div class="form-group">
-                        {{ form_widget(form.save, { 
-                            'label': 'Update',
-                            'attr': {'class': 'form-button form-control form-control-lg btn-primary'} 
-                        }) }}
-
-                        <a href="{{ path('product_index') }}">
-                            {{ form_widget(form.cancel) }}
-                        </a>
-                    </div>
+                    <button class="btn btn-primary" type="submit">Save</button>
                 </div>
             </div>
             {{ form_end(form) }}

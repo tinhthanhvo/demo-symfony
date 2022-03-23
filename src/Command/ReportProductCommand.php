@@ -55,6 +55,8 @@ class ReportProductCommand extends Command
         }
         fclose($outputBuffer);
 
+        $output->writeln('Export data product successfully!');
+
         return Command::SUCCESS;
     }
 
