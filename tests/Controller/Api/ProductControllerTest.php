@@ -3,6 +3,7 @@
 namespace App\Tests\Controller\Api;
 
 use App\DataFixtures\ProductFixtures;
+use App\DataFixtures\CategoryFixtures;
 use App\Entity\Product;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,7 +47,7 @@ class ProductControllerTest extends BaseWebTestCase
         $productFixture = new ProductFixtures();
         $this->loadFixture($productFixture);
         $productRepository = $this->entityManager->getRepository(Product::class);
-        $product = $productRepository->findOneBy(['name' => 'Ao polo 2']);
+        $product = $productRepository->findOneBy(['name' => 'Product name']);
 
         $this->client->request(
             Request::METHOD_GET,
@@ -64,4 +65,34 @@ class ProductControllerTest extends BaseWebTestCase
         $this->assertSame('Product description', $product['description']);
     }
 
+    public function testInsertProduct()
+    {
+        $categoryFixture = new CategoryFixtures();
+        $this->loadFixture($categoryFixture);
+
+        $payload = [
+            'name' => 'Product name',
+            'description' => 'Product description',
+            'category' => 1,
+            'image' => 'product_image.png',
+        ];
+
+        $this->client->request(
+            Request::METHOD_POST,
+            '/api/products',
+            [json_encode($payload)],
+            [],
+            [
+                'HTTP_ACCEPT' => 'application/json',
+            ],
+            json_encode($payload)
+        );
+
+        $this->assertEquals(Response::HTTP_CREATED, $this->client->getResponse()->getStatusCode());
+
+        $productRepository = $this->entityManager->getRepository(Product::class);
+        $product = $productRepository->findOneBy(['name' => 'Product name']);
+        $this->assertNotEmpty($product);
+        $this->assertSame('Product name', $product->getName());
+    }
 }
