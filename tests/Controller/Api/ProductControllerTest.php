@@ -2,11 +2,12 @@
 
 namespace App\Tests\Controller\Api;
 
-use App\DataFixtures\ProductFixture;
+use App\DataFixtures\ProductFixtures;
 use App\Entity\Product;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use App\Tests\Controller\BaseWebTestCase;
 
 class ProductControllerTest extends BaseWebTestCase
 {
@@ -18,7 +19,7 @@ class ProductControllerTest extends BaseWebTestCase
 
     public function testGetProducts()
     {
-        $productFixture = new ProductFixture();
+        $productFixture = new ProductFixtures();
         $this->loadFixture($productFixture);
 
         $this->client->request(
@@ -42,7 +43,7 @@ class ProductControllerTest extends BaseWebTestCase
 
     public function testGetProduct()
     {
-        $productFixture = new ProductFixture();
+        $productFixture = new ProductFixtures();
         $this->loadFixture($productFixture);
         $productRepository = $this->entityManager->getRepository(Product::class);
         $product = $productRepository->findOneBy(['name' => 'Ao polo 2']);
