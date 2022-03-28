@@ -4,6 +4,7 @@ namespace App\Tests\Controller\Api;
 
 use App\DataFixtures\ProductFixtures;
 use App\Entity\Product;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
@@ -46,7 +47,7 @@ class ProductControllerTest extends BaseWebTestCase
         $productFixture = new ProductFixtures();
         $this->loadFixture($productFixture);
         $productRepository = $this->entityManager->getRepository(Product::class);
-        $product = $productRepository->findOneBy(['name' => 'Ao polo 2']);
+        $product = $productRepository->findOneBy(['name' => 'Product name']);
 
         $this->client->request(
             Request::METHOD_GET,
@@ -64,4 +65,61 @@ class ProductControllerTest extends BaseWebTestCase
         $this->assertSame('Product description', $product['description']);
     }
 
+    public function testUpdateProduct()
+    {
+        $productFixture = new ProductFixtures();
+        $this->loadFixture($productFixture);
+        $productRepository = $this->entityManager->getRepository(Product::class);
+        $product = $productRepository->findOneBy(['name' => 'Product name']);
+
+        $payload = [
+            'name' => 'Product name update',
+            'image' => 'product_image.jpg',
+            'description' => 'Product description',
+            'category' => 1
+        ];
+        $this->client->request(
+            Request::METHOD_PUT,
+            '/api/products/'.$product->getId(),
+            [],
+            [],
+            [
+                'HTTP_ACCEPT' => 'application/json',
+            ],
+            json_encode($payload)
+        );
+
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
+        $this->entityManager->refresh($product);
+        $product = $productRepository->find($product->getId());
+        $this->assertIsObject($product);
+        $this->assertSame($payload['name'], $product->getName());
+        $this->assertSame($payload['description'], $product->getDescription());
+        $this->assertIsObject($product->getCategory());
+    }
+
+    public function testUpdateImageProduct()
+    {
+        $fileUploader = new UploadedFile(
+            __DIR__ . '/../../../fixtures/product_image_test.png',
+            'product_image_test.png',
+            'image/jpeg/png',
+            null,
+            true
+        );
+
+        $this->client->request(
+            Request::METHOD_POST,
+            '/api/products/image',
+            [],
+            [
+                'image' => $fileUploader
+            ],
+            [
+                'HTTP_ACCEPT' => 'application/json',
+            ]
+        );
+
+        $this->assertEquals(Response::HTTP_CREATED, $this->client->getResponse()->getStatusCode());
+    }
 }
